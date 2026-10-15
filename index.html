@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#071219">
   <title>ObjectWorld — 3D Full-Object Flow</title>
   <link rel="icon" type="image/png" href="static/images/icon-transparent-tight.png?v=anon-1">
-  <link rel="stylesheet" href="static/css/style.css?v=anon-1">
+  <link rel="stylesheet" href="static/css/style.css?v=anon-3">
 </head>
 <body>
   <header class="hero" id="top">
@@ -46,17 +46,17 @@
       <div class="evidence-figures shell"><figure class="confusion-figure"><img src="static/images/confusion-matrix.png" alt="Complete confusion matrices for the annotation filtering gates"><figcaption>Expert validation of the Golden and Silver annotation-filtering gates.</figcaption></figure><figure class="scaling-figure"><img src="static/images/data-scaling.png" alt="Data scaling results for simulated and real data"><figcaption>Combining real and simulated data performs best.</figcaption></figure></div>
     </section>
     <section class="section execution-section" aria-labelledby="execution-title">
-      <div class="shell section-heading"><div><p class="kicker">Execution visualization</p><h2 id="execution-title">From predicted flow to robot motion</h2></div><p>Compare the predicted 3D full-object flow with the synchronized rollout. Examples span real-robot executions, LIBERO, and ManiSkill.</p></div>
+      <div class="shell section-heading"><div><p class="kicker">Execution visualization</p><h2 id="execution-title">From predicted flow to robot motion</h2></div><p>Compare predicted 3D full-object flow with robot rollouts. Examples span real-robot executions, LIBERO, and ManiSkill.</p></div>
       <div class="scene-gallery execution-gallery shell" data-execution-gallery aria-label="Choose an execution"></div>
-      <div class="viewer shell" data-point-flow-viewer data-manifest="static/data/execution-manifest.json" data-gallery="[data-execution-gallery]" data-timeline-frames="60">
+      <div class="viewer shell" data-point-flow-viewer data-manifest="static/data/execution-manifest.json?v=anon-2" data-gallery="[data-execution-gallery]" data-timeline-frames="60">
         <div class="viewer-toolbar"><label class="scene-picker"><span>Execution</span><select data-scene aria-label="Choose an execution"></select></label><div class="viewer-actions"><button type="button" data-play>Pause</button><button type="button" data-reset>Reset view</button><label><input type="checkbox" data-scene-toggle checked> Context</label><label><input type="checkbox" data-trails-toggle checked> Trails</label></div></div>
         <div class="viewer-stage"><div class="canvas-wrap"><canvas aria-label="Interactive 3D object flow and scene point cloud"></canvas><div class="viewer-status" data-status>Loading execution index…</div><div class="viewer-hint"><span class="mouse-icon">↔</span> drag · rotate &nbsp;&nbsp; scroll · zoom</div></div><aside class="source-video"><span>Execution video</span><video data-source-video muted playsinline preload="metadata"></video><p class="execution-instruction" data-execution-instruction aria-live="polite"></p></aside></div>
         <div class="timeline"><span>t<sub>0</sub></span><input type="range" min="0" max="1" value="0" step="1" data-frame aria-label="Execution timeline"><span data-frame-label>00 / 00</span></div>
       </div>
-      <div class="legend shell"><span><i class="dot context"></i> RGB scene</span><span><i class="dot object"></i> object surface</span><span><i class="line flow"></i> pink → blue flow history</span><span><i class="camera-key"></i> camera pose</span><span>Flow completes at 48 / 60</span></div>
+      <div class="legend shell"><span><i class="dot context"></i> RGB scene</span><span><i class="dot object"></i> object surface</span><span><i class="line flow"></i> pink → blue flow history</span><span><i class="camera-key"></i> camera pose</span><span>48 flow frames · 60-step playback</span></div>
     </section>
   </main>
   <footer><div class="shell"><span class="wordmark"><span>O</span> ObjectWorld</span></div></footer>
-  <script src="static/js/point-flow-viewer.js?v=anon-1" defer></script>
+  <script src="static/js/point-flow-viewer.js?v=anon-5" defer></script>
 </body>
 </html>

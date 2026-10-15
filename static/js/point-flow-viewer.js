@@ -148,11 +148,37 @@ class PointFlowViewer {
       : this.data.flow.length;
   }
 
-  setTimelineFrame(index) {
+  flowFrameForVideoTime(seconds) {
+    const times = this.data.flowFrameTimes;
+    if (Array.isArray(times) && times.length === this.data.flow.length) {
+      let low = 0;
+      let high = times.length;
+      while (low < high) {
+        const mid = Math.floor((low + high) / 2);
+        if (times[mid] < seconds) low = mid + 1;
+        else high = mid;
+      }
+      if (low === 0) return 0;
+      if (low === times.length) return times.length - 1;
+      return seconds - times[low - 1] < times[low] - seconds ? low - 1 : low;
+    }
+    const start = this.data.flowVideoStartSeconds;
+    const end = this.data.flowVideoEndSeconds;
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return null;
+    const progress = Math.max(0, Math.min(1, (seconds - start) / (end - start)));
+    return Math.round(progress * (this.data.flow.length - 1));
+  }
+
+  setTimelineFrame(index, videoSeconds = null) {
     this.timelineFrame = Math.max(0, Math.min(this.timelineFrameCount() - 1, Math.round(index)));
-    // Flow finishes early on a longer execution timeline, then stays at its
-    // final pose. Do not fabricate additional motion frames or repeat trails.
-    this.frame = Math.min(this.timelineFrame, this.data.flow.length - 1);
+    // Most previews use the first 48 of 60 slots. Individually timed flow
+    // frames can also track a video whose approach is compressed separately.
+    const duration = (this.video && this.video.duration) || this.data.videoDuration || 0;
+    const seconds = videoSeconds == null
+      ? duration * this.timelineFrame / Math.max(this.timelineFrameCount() - 1, 1)
+      : videoSeconds;
+    const timedFrame = this.flowFrameForVideoTime(seconds);
+    this.frame = timedFrame == null ? Math.min(this.timelineFrame, this.data.flow.length - 1) : timedFrame;
     this.slider.value = this.timelineFrame;
     this.draw();
   }
@@ -445,7 +471,10 @@ class PointFlowViewer {
     } else if (!this.scrubbing && this.playing && this.data && this.data.syncPlayback && this.video && this.video.duration && !this.video.paused && !this.video.seeking) {
       const nextFrame = Math.min(this.timelineFrameCount() - 1,
         Math.round(this.video.currentTime / this.video.duration * (this.timelineFrameCount() - 1)));
-      if (nextFrame !== this.timelineFrame) this.setTimelineFrame(nextFrame);
+      const timedFlowFrame = this.flowFrameForVideoTime(this.video.currentTime);
+      if (nextFrame !== this.timelineFrame || (timedFlowFrame != null && timedFlowFrame !== this.frame)) {
+        this.setTimelineFrame(nextFrame, this.video.currentTime);
+      }
     } else if (!this.scrubbing && this.playing && this.data && !this.data.syncPlayback && now - this.lastTick > 75) {
       this.lastTick = now;
       this.setTimelineFrame((this.frame + 1) % this.data.flow.length);
